@@ -2,8 +2,7 @@ const soma = require("../helpers/soma");
 
 module.exports = class UserController {
   static async registerUser(req, res) {
-    console.log("entrou");
-    const resultado = soma;
+    const resultado = await soma(10, 20);
     res.send({ resultado });
     return;
   }

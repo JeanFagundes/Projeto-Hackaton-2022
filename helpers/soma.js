@@ -1,5 +1,5 @@
-soma(10, 20);
-
-function soma(a, b) {
+async function soma(a, b) {
   return a + b;
 }
+
+module.exports = soma;
