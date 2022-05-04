@@ -1,0 +1,31 @@
+Criar uma ferramenta que mapeia startups que tiveram crescimento durante a pandemia, que ele provavelmente sera expandido mais depois da crise ter fim.
+
+----Aplicativo onde vc adiciona qual a sua profissão e as pessoas podem achar e avaliar tanto o contratado como o contratante.
+-feed de imagens e videos
+-busca de contratantes
+-colocar anuncios no app
+-colocar premium para seu produto ser mais visualizado.
+-royalties pela identidade visual.
+-se o serviço for ruim, pode ser reembolsado o valor e é convertido para outro profissional o valor reembolsando em anuncios de cliques **ter um chat aberto para discutirem se o serviço foi mal feito ou não
+-o profissional se dispõe a comprar a peça para fazer o serviço
+-filtrar por valor e geolocalização, avaliação
+-quem fecha mais negocio pelo aplicativo começa a ser mais visualizado (ter mais destaque).
+--talvez proibir o contato do contratado e negociar somente pelo aplicativo
+
+**Problemas
+--declarar valores.(precisa ter mei - validação)
+--o contratato terá que emitir a nota
+
+
+
+----Aplicativo que cria chatbot para automatizar mensagens no whatsap
+--fazer o codigo base para levar o cliente para um site externo.
+--dentro do site externo o cliente ira escolher os produtos que ira pegar e calcular o valor na hora.
+--o produto será retirado do banco de dados automaticamente quando o pedido for concluido.
+--o dominio do site pode ser vendido pelo proprio app com o aumento do preço mensal.
+--precisa ser cobrado a implementação dependendo do tamanho do estabelecimento.
+--teria menos custo por não precisar de um funcionario para ficar responsável por essa tarefa, seria otimizado o serviço.
+--em estabelecimentos de bairro não está disposto a pagar um certo valor para o ifood pois os clientes deles ja são fiéis, com o aplicativo resolveria um problema operacional.
+--Precisa ter um gerente de compras que cuidara das duvidas do cliente e ensinar ele a fazer as coisas.
+--pode ser feito com pizzarias, mercadinhos, farmacia, etc.
+--Sistema de pagamento online.
