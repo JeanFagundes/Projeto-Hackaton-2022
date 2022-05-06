@@ -1,5 +1,4 @@
 const express = require("express");
-const exphbs = require("express-handlebars");
 
 const app = express();
 
@@ -16,9 +15,6 @@ const Merchant = require('./models/Merchant/Merchant')
 const MotoboyController = require("./controllers/MotoboyController");
 const motoboyRoutes = require("./routes/motoboyRoutes");
 
-//template engine
-app.engine('handlebars', exphbs.engine())
-app.set("view engine", "handlebars");
 
 app.use(
   express.urlencoded({
@@ -26,10 +22,6 @@ app.use(
   })
 );
 app.use(express.json());
-
-//acessar css
-app.use(express.static("public"));
-
 
 app.use("/", motoboyRoutes);
 

@@ -13,10 +13,15 @@ router.patch("/updateMotoboy/:id", motoboyController.updateMotoboyAccount);
 router.delete("/deleteMotoboy/:id", motoboyController.deleteMotoboy);
 router.get("/showMotoboys", motoboyController.showMotoboys);
 
+// funcionalidade
+router.post("/ratingMotoboy/:id", motoboyController.ratingMotoboy);
+router.get("/AllRatingMotoboy/:id", motoboyController.AllRatingMotoboy);
+
 // rotas de comerciante
 router.post("/merchant/register", merchantController.createMerchantAccount);
 router.post("/merchant/registerAddress/:id", merchantController.createMerchantAddress);
 router.patch("/merchant/updateMerchant/:id", merchantController.updateMerchantAccount);
 router.delete("/merchant/deleteMerchant/:id", merchantController.deleteMerchant);
 router.post("/merchant/login", merchantController.loginMerchant);
+
 module.exports = router;

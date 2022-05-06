@@ -3,6 +3,7 @@ const validator = require("validator");
 const validarCpf = require("cpf-cnpj-validator");
 const Motoboy = require("../models/Motoboy/Motoboy");
 const MotoboyAddress = require("../models/Motoboy/MotoboyAddress");
+const RatingMotoboy = require("../models/Motoboy/RatingMotoboy");
 // const DocumentRegistration = require("../models/Motoboy/DocumentRegistration");
 
 module.exports = class UserController {
@@ -85,7 +86,7 @@ module.exports = class UserController {
     try {
       await Motoboy.create(motoboy);
       console.log("usuario criado com sucesso", motoboy);
-      return res.status(201).json(motoboy);
+      return res.json({ message: "Usuario adicionado com sucesso" });
     } catch (err) {
       return res.status(500).json({
         message: `Não foi possivel criar o usuario: ${err}`,
@@ -243,6 +244,60 @@ module.exports = class UserController {
       return res.status(500).json({
         message: `Não foi possivel visualizar os motoboys: ${err}`,
       });
+    }
+  }
+
+  static async ratingMotoboy(req, res) {
+    const motoboyId = req.params.id;
+    const {
+      rating,
+      comments,
+    } = req.body;
+
+    const motoboy = await Motoboy.findOne({
+      where: {
+        id: motoboyId,
+      },
+    });
+
+    if (!motoboy) {
+      return res.status(400).json({ message: "Usuario não encontrado" });
+    }
+
+    const ratingMotoboy = {
+      rating,
+      comments,
+      MotoboyId: motoboyId,
+    };
+
+    try {
+      await RatingMotoboy.create(ratingMotoboy);
+      console.log("Avaliação adicionadas com sucesso");
+      return res.status(201).json(ratingMotoboy);
+    } catch (err) {
+      return res.status(500).json({
+        message: `Não foi possivel adicionar as fotos do motoboy: ${err}`,
+      });
+    }
+  }
+
+  static async AllRatingMotoboy(req, res) {
+    const motoboyId = req.params.id;
+
+    // const motoboy = Motoboy.findOne({
+    //   where: {
+    //     id: motoboyId,
+    //   },
+    // });
+    try {
+      const allAvaliation = await RatingMotoboy.findAll({
+        where: {
+          MotoboyId: motoboyId,
+        },
+      });
+      return res.status(200).json(allAvaliation);
+    } catch (error) {
+      return res.status(400).json({ message: "Não foi possivel localizar as avaliações" });
     }
   }
 };
