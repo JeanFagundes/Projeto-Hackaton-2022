@@ -1,12 +1,14 @@
 {
+  "name": "default",
   "type": "postgres",
   "host": "localhost",
   "port": 5432,
   "username": "postgres",
   "password": "docker",
-  "database": "hackaton",
-  "migration": ["./src/shared/typeorm/migrations/*.ts"],
+  "database": "postgres",
+  "entities": ["src/models/**/*.ts"],
+  "migrations": ["src/shared/typeorm/migrations/*.ts"],
   "cli": {
-    "migrationsDir": "./src/shared/typeorm/migrations/*.ts"
+    "migrationsDir": "src/shared/typeorm/migrations"
   }
 }
