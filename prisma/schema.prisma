@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// models de comerciantes
+
+model Merchant {
+  id           Int    @id @default(autoincrement())
+  name         String
+  company_name String @unique
+  email        String @unique
+  password     String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  CompanyAddresses CompanyAddress[]
+  @@map("merchants")
+}
+
+model CompanyAddress {
+  id         Int     @id @default(autoincrement())
+  cep        String
+  address    String
+  number     String
+  complement String?
+  state      String
+  city       String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  merchant_addresses Merchant @relation(fields: [merchant_id], references: [id])
+
+  merchant_id Int
+  @@map("company_addresses")
+}
+
+// model de motoboys
+
+model Motoboy {
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String @unique
+  password String
+
+  created_at     DateTime         @default(now())
+  updated_at     DateTime         @updatedAt
+  MotoboyAddress MotoboyAddress[]
+  RatingMotoboy  RatingMotoboy[]
+
+  @@map("motoboys")
+}
+
+model MotoboyAddress {
+  id         Int     @id @default(autoincrement())
+  cep        String
+  address    String
+  number     String
+  complement String?
+  state      String
+  city       String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  motoboy_address Motoboy @relation(fields: [motoboy_id], references: [id])
+  motoboy_id      Int
+
+  @@map("motoboy_addresses")
+}
+
+model RatingMotoboy {
+  id       Int     @id @default(autoincrement())
+  rating   Int
+  comments String?
+
+  rating_motoboy Motoboy @relation(fields: [motoboy_id], references: [id])
+  motoboy_id     Int
+
+  @@map("rating_motoboys")
+}
