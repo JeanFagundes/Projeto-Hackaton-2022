@@ -1,5 +1,5 @@
-import { CreateSession } from './../services/CreateSession';
 import { Request, Response } from 'express';
+import { CreateSession } from './../services/CreateSession';
 
 export default class SessionsController {
   async create(request: Request, response: Response): Promise<Response> {

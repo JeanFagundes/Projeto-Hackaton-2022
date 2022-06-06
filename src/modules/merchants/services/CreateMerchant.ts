@@ -16,15 +16,25 @@ export class CreateMerchant {
     if (!validator.isEmail(email)) {
       throw new AppError('Insira um email valido');
     }
-    const merchantExists = await prisma.merchant.findFirst({
+    const merchantExists = await prisma.merchant.findUnique({
       where: {
-        email: {
-          mode: 'insensitive',
-        },
+        email,
       },
     });
     if (merchantExists) {
       throw new AppError('Ja tem um cadastro de comerciante com esse email');
+    }
+
+    const company_name_exists = await prisma.merchant.findUnique({
+      where: {
+        company_name,
+      },
+    });
+
+    if (company_name_exists) {
+      throw new AppError(
+        'Ja existe uma empresa cadastrada com essa razão social',
+      );
     }
 
     //validação de senha
