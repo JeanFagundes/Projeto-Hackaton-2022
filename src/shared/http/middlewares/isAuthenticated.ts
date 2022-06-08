@@ -1,9 +1,9 @@
+import { Request, Response, NextFunction } from 'express';
 import authConfig from '@config/auth';
 import AppError from '@shared/errors/AppError';
-import { Request, Response, NextFunction } from 'express';
 import { verify } from 'jsonwebtoken';
 
-interface TokenPayload {
+interface ITokenPayload {
   iat: number;
   exp: number;
   sub: string;
@@ -24,8 +24,13 @@ export default function isAuthenticated(
   try {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const decodedToken = verify(token, authConfig.jwt.secret);
+    //finalizar essa parte
+    console.log(decodedToken.sub, 'agora vai essa merda');
 
-    const { sub } = decodedToken as TokenPayload;
+    const { sub } = decodedToken as ITokenPayload;
+
+    console.log('olha o sub aqui fdp', sub);
+    console.log('decoded porra', decodedToken);
 
     request.user = {
       id: sub,

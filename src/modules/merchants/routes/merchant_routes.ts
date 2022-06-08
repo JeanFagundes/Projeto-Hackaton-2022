@@ -1,11 +1,18 @@
 import { Router } from 'express';
 import MerchantController from './../controllers/MerchantController';
 import { celebrate, Joi, Segments } from 'celebrate';
+import multer from 'multer';
+import uploadconfig from '@config/uploadImages';
+import isAuthenticated from '../../../shared/http/middlewares/isAuthenticated';
+import MerchantDocumentController from '../controllers/MerchantDocumentController';
 
-const sessions_routes = Router();
+const merchants_routes = Router();
 const merchant_controller = new MerchantController();
+const merchantDocumentController = new MerchantDocumentController();
 
-sessions_routes.post(
+const upload = multer(uploadconfig);
+
+merchants_routes.post(
   '/create',
   celebrate({
     [Segments.BODY]: {
@@ -18,4 +25,11 @@ sessions_routes.post(
   merchant_controller.create,
 );
 
-export default sessions_routes;
+merchants_routes.patch(
+  '/photo',
+  isAuthenticated,
+  upload.single('photo'),
+  merchantDocumentController.update,
+);
+
+export default merchants_routes;

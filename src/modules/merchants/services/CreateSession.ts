@@ -1,12 +1,18 @@
-import { prisma } from '@shared/database/prismaClient';
-import AppError from '@shared/errors/AppError';
-import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
+import { compare } from 'bcryptjs';
+import { prisma } from '@shared/database/prismaClient';
+import { Merchant } from '@prisma/client';
+import AppError from '@shared/errors/AppError';
 import authConfig from '@config/auth';
 
 interface ICreateSession {
   email: string;
   password: string;
+}
+
+interface IResponse {
+  merchant: Merchant;
+  token: string;
 }
 
 export class CreateSession {
@@ -26,7 +32,11 @@ export class CreateSession {
       throw new AppError('Usuario ou senha invalido', 401);
     }
 
-    const token = sign({ email }, authConfig.jwt.secret, {
+    const merchant_id = merchant.id.toString();
+
+    //finalizar essa parte
+    const token = sign({ data: merchant_id }, authConfig.jwt.secret, {
+      subject: merchant_id,
       expiresIn: authConfig.jwt.expiresIn,
     });
 
