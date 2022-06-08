@@ -28,7 +28,7 @@ export default function isAuthenticated(
     const { sub } = decodedToken as TokenPayload;
 
     request.user = {
-      id: parseInt(sub),
+      id: sub,
     };
 
     return next();
