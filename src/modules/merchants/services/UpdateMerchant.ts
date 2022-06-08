@@ -1,50 +1,110 @@
 import { prisma } from '@shared/database/prismaClient';
 import AppError from '@shared/errors/AppError';
 import validator from 'validator';
-import { hash } from 'bcryptjs';
+import { hash, compare } from 'bcryptjs';
+import { Merchant } from '@prisma/client';
 
-interface IUpdateMerchant {
-  name: string;
-  company_name: string;
-  email: string;
+interface IUpdateMerchantEmail {
+  merchant_id: number;
+  name?: string;
+  email?: string;
   password: string;
+  new_password?: string;
 }
 
-export class UpdateMerchant {
-  async execute({ name, company_name, email, password }: IUpdateMerchant) {
+export class UpdateMerchantEmail {
+  async execute({
+    merchant_id,
+    name,
+    email,
+    password,
+    new_password,
+  }: IUpdateMerchantEmail): Promise<Merchant | undefined> {
     //validação de email
-    if (!validator.isEmail(email)) {
-      throw new AppError('Insira um email valido');
-    }
-    const merchantExists = await prisma.merchant.findFirst({
+    const merchantUpdate = await prisma.merchant.findUnique({
       where: {
-        email: {
-          mode: 'insensitive',
+        id: merchant_id,
+      },
+    });
+    if (!merchantUpdate) {
+      throw new AppError('Comerciante não encontrado');
+    }
+
+    if (name) {
+      const checkPassword = await compare(password, merchantUpdate.password);
+
+      if (!checkPassword) {
+        throw new AppError(
+          'A senha do comerciante para alterar o nome está incorreta',
+        );
+      }
+      await prisma.merchant.update({
+        where: {
+          id: merchant_id,
         },
-      },
-    });
-    if (merchantExists) {
-      throw new AppError('Ja tem um cadastro de comerciante com esse email');
+        data: {
+          name: name,
+        },
+      });
+      return merchantUpdate;
     }
 
-    //validação de senha
-    if (!validator.isStrongPassword(password)) {
-      throw new AppError(
-        'Certifique que a senha tenha letras maiusculas, minusculas, numero e caracter especial',
-      );
+    if (email) {
+      const merchantUpdateEmail = await prisma.merchant.findUnique({
+        where: {
+          email,
+        },
+      });
+
+      if (merchantUpdateEmail) {
+        throw new AppError('Esse email ja está em uso');
+      }
+
+      const checkPassword = await compare(password, merchantUpdate.password);
+
+      if (!checkPassword) {
+        throw new AppError(
+          'A senha do comerciante para alterar o email está incorreta',
+        );
+      }
+
+      await prisma.merchant.update({
+        where: {
+          id: merchant_id,
+        },
+        data: {
+          email: email,
+        },
+      });
+
+      return merchantUpdate;
     }
 
-    const hashPassword = await hash(password, 10);
+    if (password && new_password) {
+      const checkPassword = await compare(password, merchantUpdate.password);
 
-    const merchant = await prisma.merchant.create({
-      data: {
-        name,
-        company_name,
-        email,
-        password: hashPassword,
-      },
-    });
+      if (!checkPassword) {
+        throw new AppError('A senha atual está incorreta');
+      }
 
-    return merchant;
+      //validação para usar senha em formato cripto
+      if (!validator.isStrongPassword(new_password)) {
+        throw new AppError(
+          'Certifique que a senha tenha letras maiusculas, minusculas, numero e caracter especial',
+        );
+      }
+      const hashPassword = await hash(new_password, 10);
+
+      await prisma.merchant.update({
+        where: {
+          id: merchant_id,
+        },
+        data: {
+          password: hashPassword,
+        },
+      });
+
+      return merchantUpdate;
+    }
   }
 }
