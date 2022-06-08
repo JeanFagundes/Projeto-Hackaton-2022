@@ -16,7 +16,7 @@ interface IResponse {
 }
 
 export class CreateSession {
-  async execute({ email, password }: ICreateSession) {
+  async execute({ email, password }: ICreateSession): Promise<IResponse> {
     const merchant = await prisma.merchant.findUnique({
       where: {
         email,
@@ -32,11 +32,8 @@ export class CreateSession {
       throw new AppError('Usuario ou senha invalido', 401);
     }
 
-    const merchant_id = merchant.id.toString();
-
     //finalizar essa parte
-    const token = sign({ data: merchant_id }, authConfig.jwt.secret, {
-      subject: merchant_id,
+    const token = sign({ data: merchant.id }, authConfig.jwt.secret, {
       expiresIn: authConfig.jwt.expiresIn,
     });
 

@@ -6,13 +6,13 @@ import { verify } from 'jsonwebtoken';
 interface ITokenPayload {
   iat: number;
   exp: number;
-  sub: string;
+  data: string;
 }
 export default function isAuthenticated(
   request: Request,
   response: Response,
   next: NextFunction,
-) {
+): void {
   const authHeader = request.headers.authorization;
 
   if (!authHeader) {
@@ -25,17 +25,12 @@ export default function isAuthenticated(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const decodedToken = verify(token, authConfig.jwt.secret);
     //finalizar essa parte
-    console.log(decodedToken.sub, 'agora vai essa merda');
 
-    const { sub } = decodedToken as ITokenPayload;
+    const { data } = decodedToken as ITokenPayload;
 
-    console.log('olha o sub aqui fdp', sub);
-    console.log('decoded porra', decodedToken);
-
-    request.user = {
-      id: sub,
+    request.merchant = {
+      id: data,
     };
-
     return next();
   } catch {
     throw new AppError('token jwt invalido');

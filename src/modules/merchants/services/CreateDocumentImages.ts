@@ -20,7 +20,6 @@ export class CreateDocumentImages {
         id: merchant_id,
       },
     });
-
     if (!merchantExists) {
       throw new AppError('Comerciante não encontrado');
     }
